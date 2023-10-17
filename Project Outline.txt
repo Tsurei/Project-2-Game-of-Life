@@ -1,0 +1,20 @@
+Classes needed
+-Gameboard
+-Cell
+
+UI objects needed
+-Pause/Unpause button
+-Restart Button
+-UI features, i.e. generation number
+-Cells wrap to other side when touching edge
+-Next generation of the board should be fully calculated before the current board state is updated.
+
+
+Gameboard Class
+-Holds references to cell class
+-Update tick in gameboard class, which should then propogate to cell class objects
+-2D grid of squares, 2D matrix
+
+Cell Class
+-Holds reference to SpriteRenderer
+-dead(white) or alive(black) enum states
