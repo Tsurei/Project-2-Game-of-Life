@@ -68,6 +68,6 @@ public class Cell : MonoBehaviour
 
     public void SetStatus(CellState state)
     {
-        status = state;
+        nextStatus = state;
     }
 }
