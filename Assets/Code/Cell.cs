@@ -21,8 +21,12 @@ public class Cell : MonoBehaviour
     private Cell bottomLeft;
     private Cell bottom;
     private Cell bottomRight;
+    private int neighbourAlive = 0;
 
-    public Cell(Cell topLeft,
+    public Cell()
+    {
+        /*
+                Cell topLeft,
                 Cell top, 
                 Cell topRight, 
                 Cell left, 
@@ -30,17 +34,18 @@ public class Cell : MonoBehaviour
                 Cell bottomLeft, 
                 Cell bottom, 
                 Cell bottomRight
-                )
-    {
+        */
         status = CellState.Dead;
-        this.topLeft = topLeft;
-        this.top = top;
-        this.topRight = topRight;
-        this.left = left;
-        this.right = right;
-        this.bottomLeft = bottomLeft;
-        this.bottom = bottom;
-        this.bottomRight = bottomRight;
+        /*
+                this.topLeft = topLeft;
+                this.top = top;
+                this.topRight = topRight;
+                this.left = left;
+                this.right = right;
+                this.bottomLeft = bottomLeft;
+                this.bottom = bottom;
+                this.bottomRight = bottomRight;
+        */
     }
 
     // Start is called before the first frame update
@@ -66,8 +71,54 @@ public class Cell : MonoBehaviour
         return status;
     }
 
-    public void SetStatus(CellState state)
+    public void SetNextStatus()
     {
-        nextStatus = state;
+        if(neighbourAlive < 2 || neighbourAlive > 3)
+        {
+            nextStatus = CellState.Dead;
+        }else if( (neighbourAlive >= 2 && neighbourAlive <= 3) || (status == CellState.Dead && neighbourAlive == 3) ){
+            nextStatus = CellState.Alive;
+        }
+    }
+
+    public void SetStatus()
+    {
+        status = nextStatus;
+    }
+
+    public void CalculateNeighbours()
+    {
+        if(topLeft.GetStatus() == CellState.Alive)
+        {
+            neighbourAlive++;
+        }
+        if (top.GetStatus() == CellState.Alive)
+        {
+            neighbourAlive++;
+        }
+        if (topRight.GetStatus() == CellState.Alive)
+        {
+            neighbourAlive++;
+        }
+        if (left.GetStatus() == CellState.Alive)
+        {
+            neighbourAlive++;
+        }
+        if (right.GetStatus() == CellState.Alive)
+        {
+            neighbourAlive++;
+        }
+        if (bottomLeft.GetStatus() == CellState.Alive)
+        {
+            neighbourAlive++;
+        }
+        if (bottom.GetStatus() == CellState.Alive)
+        {
+            neighbourAlive++;
+        }
+        if (bottomRight.GetStatus() == CellState.Alive)
+        {
+            neighbourAlive++;
+        }
     }
 }
