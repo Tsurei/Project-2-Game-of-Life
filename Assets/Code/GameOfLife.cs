@@ -21,19 +21,24 @@ public class GameOfLife : MonoBehaviour
          * 
          */
         gameBoard = new Cell[gameBoardLength, gameBoardHeight];
-        for(int i = 0; i < gameBoardLength; i++)
-        {
-            for(int j = 0; j < gameBoardHeight; j++)
-            {
-                Cell c = new Cell();
-                gameBoard[i, j] = c;
-            }
-        }
+
+        //Create gameboard
         for (int i = 0; i < gameBoardLength; i++)
         {
             for (int j = 0; j < gameBoardHeight; j++)
             {
-                
+                Cell c = new Cell();
+                gameBoard[i, j] = c;
+
+                // Connect each cell to its neighbors
+                c.SetTopLeft(GetNeighbor(i - 1, j - 1));
+                c.SetTop(GetNeighbor(i, j - 1));
+                c.SetTopRight(GetNeighbor(i + 1, j - 1));
+                c.SetLeft(GetNeighbor(i - 1, j));
+                c.SetRight(GetNeighbor(i + 1, j));
+                c.SetBottomLeft(GetNeighbor(i - 1, j + 1));
+                c.SetBottom(GetNeighbor(i, j + 1));
+                c.SetBottomRight(GetNeighbor(i + 1, j + 1));
             }
         }
     }
@@ -42,6 +47,21 @@ public class GameOfLife : MonoBehaviour
     void Update()
     {
         
+    }
+    private Cell GetNeighbor(int x, int y)
+    {
+        // Check for out-of-bounds coordinates
+        if (x >= 0 && x < gameBoardLength && y >= 0 && y < gameBoardHeight)
+        {
+            return gameBoard[x, y];
+        }
+        else
+        {
+            // Handle edge cases by wrapping around (assuming a toroidal grid)
+            x = (x + gameBoardLength) % gameBoardLength;
+            y = (y + gameBoardHeight) % gameBoardHeight;
+            return gameBoard[x, y];
+        }
     }
 
     public void SetGameBoardLength(int length)

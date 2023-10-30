@@ -121,4 +121,96 @@ public class Cell : MonoBehaviour
             neighbourAlive++;
         }
     }
+
+    // Accessor methods for neighboring cells
+    public Cell GetTopLeft()
+    {
+        return topLeft;
+    }
+
+    public void SetTopLeft(Cell cell)
+    {
+        topLeft = cell;
+    }
+
+    public Cell GetTop()
+    {
+        return top;
+    }
+
+    public void SetTop(Cell cell)
+    {
+        top = cell;
+    }
+
+    public Cell GetTopRight()
+    {
+        return topRight;
+    }
+
+    public void SetTopRight(Cell cell)
+    {
+        topRight = cell;
+    }
+
+    public Cell GetLeft()
+    {
+        return left;
+    }
+
+    public void SetLeft(Cell cell)
+    {
+        left = cell;
+    }
+
+    public Cell GetRight()
+    {
+        return right;
+    }
+
+    public void SetRight(Cell cell)
+    {
+        right = cell;
+    }
+
+    public Cell GetBottomLeft()
+    {
+        return bottomLeft;
+    }
+
+    public void SetBottomLeft(Cell cell)
+    {
+        bottomLeft = cell;
+    }
+
+    public Cell GetBottom()
+    {
+        return bottom;
+    }
+
+    public void SetBottom(Cell cell)
+    {
+        bottom = cell;
+    }
+
+    public Cell GetBottomRight()
+    {
+        return bottomRight;
+    }
+
+    public void SetBottomRight(Cell cell)
+    {
+        bottomRight = cell;
+    }
+
+    // Accessor methods for neighbor count
+    public int GetNeighbourAliveCount()
+    {
+        return neighbourAlive;
+    }
+
+    public void SetNeighbourAliveCount(int count)
+    {
+        neighbourAlive = count;
+    }
 }
