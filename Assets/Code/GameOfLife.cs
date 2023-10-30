@@ -57,7 +57,7 @@ public class GameOfLife : MonoBehaviour
         }
         else
         {
-            // Handle edge cases by wrapping around (assuming a toroidal grid)
+            // Handle edge cases by wrapping around
             x = (x + gameBoardLength) % gameBoardLength;
             y = (y + gameBoardHeight) % gameBoardHeight;
             return gameBoard[x, y];
