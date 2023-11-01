@@ -6,8 +6,12 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameOfLife gameOfLife;
+    [Range(10, 50)]
     [SerializeField] private int gameBoardLength;
+    [Range(10, 50)]
     [SerializeField] private int gameBoardHeight;
+    [Range(0, 150)]
+    [SerializeField] private int spawnCount;
 
     private Camera mainCamera;
     private float simulationInterval = 2f;
@@ -26,7 +30,7 @@ public class GameManager : MonoBehaviour
         gameOfLife.InitializeGameBoard();
         gameOfLife.PopulateGameBoardWithCells(cellSizeX, cellSizeY); // Pass cellSizeX and cellSizeY to the method.
 
-        GenerateRandomAliveCells(70);
+        GenerateRandomAliveCells(spawnCount);
     }
 
     void Update()
