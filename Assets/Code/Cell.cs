@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))]
 public class Cell : MonoBehaviour
 {
-    private SpriteRenderer sprite;
+    public SpriteRenderer sprite;
+    private Color aliveColor = Color.green;
+    private Color deadColor = Color.black;
     public enum CellState
     {
         Alive,
@@ -25,44 +27,26 @@ public class Cell : MonoBehaviour
 
     public Cell()
     {
-        /*
-                Cell topLeft,
-                Cell top, 
-                Cell topRight, 
-                Cell left, 
-                Cell right, 
-                Cell bottomLeft, 
-                Cell bottom, 
-                Cell bottomRight
-        */
         status = CellState.Dead;
-        /*
-                this.topLeft = topLeft;
-                this.top = top;
-                this.topRight = topRight;
-                this.left = left;
-                this.right = right;
-                this.bottomLeft = bottomLeft;
-                this.bottom = bottom;
-                this.bottomRight = bottomRight;
-        */
+        nextStatus = CellState.Dead;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        sprite = this.GetComponent <SpriteRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(status == CellState.Alive)
+        if (status == CellState.Alive)
         {
-            //Make sprite alive sprite
-        }else if(status == CellState.Dead)
+            sprite.color = aliveColor;
+        }
+        else if (status == CellState.Dead)
         {
-            //Make sprite dead sprite
+            sprite.color = deadColor;
         }
     }
 
@@ -73,50 +57,55 @@ public class Cell : MonoBehaviour
 
     public void SetNextStatus()
     {
-        if(neighbourAlive < 2 || neighbourAlive > 3)
+        if (neighbourAlive < 2 || neighbourAlive > 3)
         {
             nextStatus = CellState.Dead;
-        }else if( (neighbourAlive >= 2 && neighbourAlive <= 3) || (status == CellState.Dead && neighbourAlive == 3) ){
+        }
+        else if ((neighbourAlive >= 2 && neighbourAlive <= 3) || (status == CellState.Dead && neighbourAlive == 3))
+        {
             nextStatus = CellState.Alive;
         }
     }
 
-    public void SetStatus()
+    public void UpdateStatus()
     {
         status = nextStatus;
     }
 
     public void CalculateNeighbours()
     {
-        if(topLeft.GetStatus() == CellState.Alive)
+        neighbourAlive = 0; // Reset the count
+
+        // Check if neighbors exist before accessing their status
+        if (topLeft != null && topLeft.GetStatus() == CellState.Alive)
         {
             neighbourAlive++;
         }
-        if (top.GetStatus() == CellState.Alive)
+        if (top != null && top.GetStatus() == CellState.Alive)
         {
             neighbourAlive++;
         }
-        if (topRight.GetStatus() == CellState.Alive)
+        if (topRight != null && topRight.GetStatus() == CellState.Alive)
         {
             neighbourAlive++;
         }
-        if (left.GetStatus() == CellState.Alive)
+        if (left != null && left.GetStatus() == CellState.Alive)
         {
             neighbourAlive++;
         }
-        if (right.GetStatus() == CellState.Alive)
+        if (right != null && right.GetStatus() == CellState.Alive)
         {
             neighbourAlive++;
         }
-        if (bottomLeft.GetStatus() == CellState.Alive)
+        if (bottomLeft != null && bottomLeft.GetStatus() == CellState.Alive)
         {
             neighbourAlive++;
         }
-        if (bottom.GetStatus() == CellState.Alive)
+        if (bottom != null && bottom.GetStatus() == CellState.Alive)
         {
             neighbourAlive++;
         }
-        if (bottomRight.GetStatus() == CellState.Alive)
+        if (bottomRight != null && bottomRight.GetStatus() == CellState.Alive)
         {
             neighbourAlive++;
         }
@@ -212,5 +201,11 @@ public class Cell : MonoBehaviour
     public void SetNeighbourAliveCount(int count)
     {
         neighbourAlive = count;
+    }
+
+    // Set Method for Status
+    public void SetStatus(CellState state)
+    {
+        status = state;
     }
 }
