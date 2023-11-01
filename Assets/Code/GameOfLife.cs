@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameOfLife : MonoBehaviour
 {
+    private int currentGen = 0;
     public GameObject cellPrefab;
     private Cell[,] gameBoard;
 
@@ -101,6 +102,8 @@ public class GameOfLife : MonoBehaviour
                 currentCell.UpdateStatus(); // Set the current status to the next status
             }
         }
+
+        currentGen++;
     }
 
     public void ClearGrid()
