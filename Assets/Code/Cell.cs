@@ -70,13 +70,27 @@ public class Cell : MonoBehaviour
 
     public void SetNextStatus()
     {
-        if (neighbourAlive < 2 || neighbourAlive > 3)
+        if (status == CellState.Alive)
         {
-            nextStatus = CellState.Dead;
+            if (neighbourAlive < 2 || neighbourAlive > 3)
+            {
+                nextStatus = CellState.Dead;
+            }
+            else if ((neighbourAlive >= 2 && neighbourAlive <= 3) || (status == CellState.Dead && neighbourAlive == 3))
+            {
+                nextStatus = CellState.Alive;
+            }
         }
-        else if ((neighbourAlive >= 2 && neighbourAlive <= 3) || (status == CellState.Dead && neighbourAlive == 3))
+        else
         {
-            nextStatus = CellState.Alive;
+            if (neighbourAlive == 3)
+            {
+                nextStatus = CellState.Alive;
+            }
+            else
+            {
+                nextStatus = CellState.Dead;
+            }
         }
     }
 
