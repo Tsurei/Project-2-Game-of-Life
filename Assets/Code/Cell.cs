@@ -6,8 +6,8 @@ using UnityEngine;
 public class Cell : MonoBehaviour
 {
     public SpriteRenderer sprite;
-    private Color aliveColor = Color.green;
-    private Color deadColor = Color.black;
+    private Color aliveColor = Color.black;
+    private Color deadColor = Color.white;
     private bool manualSet = false;
     public enum CellState
     {
