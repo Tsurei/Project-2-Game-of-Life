@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class ClearGrid : MonoBehaviour
 {
-    private GameOfLife gameOfLife; // Reference to your GameOfLife component
+    private GameOfLife gameOfLife;
 
     void Start()
     {
-        gameOfLife = GetComponent<GameOfLife>();
+        gameOfLife = GameObject.FindWithTag("GameManager").GetComponent<GameOfLife>();
     }
 
     public void Clear()
     {
-        gameOfLife.ClearGrid(); // Add a method in your GameOfLife script to clear the grid.
+        gameOfLife.ClearGrid();
     }
 }
 

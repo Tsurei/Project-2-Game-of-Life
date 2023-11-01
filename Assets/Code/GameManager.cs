@@ -8,42 +8,70 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameOfLife gameOfLife;
     [SerializeField] private int gameBoardLength;
     [SerializeField] private int gameBoardHeight;
-    [SerializeField] private GameObject cellPrefab; 
 
     private Camera mainCamera;
-    private float simulationInterval = 5f;
-
+    private float simulationInterval = 2f;
     private float timer = 0f;
 
-    // Start is called before the first frame update
     void Start()
     {
-        mainCamera = Camera.main; // Get a reference to the camera
+        mainCamera = Camera.main;
 
-        // Calculate the cell size based on camera size and grid size
         float cellSizeX = mainCamera.orthographicSize * 2 / gameBoardLength;
         float cellSizeY = mainCamera.orthographicSize * 2 / gameBoardHeight;
 
-        // Set game board dimensions
         gameOfLife.SetGameBoardLength(gameBoardLength);
         gameOfLife.SetGameBoardHeight(gameBoardHeight);
 
-        // Initialize the game board
         gameOfLife.InitializeGameBoard();
+        gameOfLife.PopulateGameBoardWithCells(cellSizeX, cellSizeY); // Pass cellSizeX and cellSizeY to the method.
 
-        // Instantiate and populate the game board with cells
-        gameOfLife.PopulateGameBoardWithCells(cellPrefab, cellSizeX, cellSizeY);
+        GenerateRandomAliveCells(70);
     }
 
     void Update()
     {
-        // Check if it's time to run the simulation
         timer += Time.deltaTime;
         if (timer >= simulationInterval)
         {
             gameOfLife.CalculateNextGeneration();
-            timer = 0f; // Reset the timer
+            timer = 0f;
+        }
+
+        // Check for user input when manual cell setting is enabled
+        if (gameOfLife.IsManualCellSettingEnabled() && Input.GetMouseButtonDown(0))
+        {
+            HandleCellClick();
         }
     }
 
+    public void GenerateRandomAliveCells(int numCells)
+    {
+        for (int i = 0; i < numCells; i++)
+        {
+            int randomX = Random.Range(0, gameBoardLength);
+            int randomY = Random.Range(0, gameBoardHeight);
+
+            // Set the cell at randomX, randomY as alive
+            gameOfLife.GetCell(randomX, randomY).SetStatus(Cell.CellState.Alive);
+        }
+    }
+
+    void HandleCellClick()
+    {
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.collider != null)
+            {
+                Cell clickedCell = hit.collider.GetComponent<Cell>();
+                if (clickedCell != null)
+                {
+                    clickedCell.ToggleCellStatus();
+                }
+            }
+        }
+    }
 }

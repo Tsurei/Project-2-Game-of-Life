@@ -8,6 +8,7 @@ public class Cell : MonoBehaviour
     public SpriteRenderer sprite;
     private Color aliveColor = Color.green;
     private Color deadColor = Color.black;
+    private bool manualSet = false;
     public enum CellState
     {
         Alive,
@@ -47,6 +48,18 @@ public class Cell : MonoBehaviour
         else if (status == CellState.Dead)
         {
             sprite.color = deadColor;
+        }
+
+    }
+
+    private void OnMouseOver()
+    {
+        if (manualSet)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                ToggleCellStatus();
+            }
         }
     }
 
@@ -207,5 +220,23 @@ public class Cell : MonoBehaviour
     public void SetStatus(CellState state)
     {
         status = state;
+    }
+
+    public void ToggleCellStatus()
+    {
+            
+        if (GetStatus() == CellState.Alive) 
+        {        
+            SetStatus(CellState.Dead);    
+        }   
+        else  
+        {       
+            SetStatus(CellState.Alive);
+        }
+    }
+
+    public void SetManual(bool state)
+    {
+        manualSet = state;
     }
 }

@@ -7,13 +7,17 @@ public class GameOfLife : MonoBehaviour
     public GameObject cellPrefab;
     private Cell[,] gameBoard;
 
+    private bool manualCellSettingEnabled = false;
     private Camera mainCamera;
     private int gameBoardLength;
     private int gameBoardHeight;
+    private Vector3 cameraCenter;
     // Start is called before the first frame update
     void Start()
     {
         mainCamera = Camera.main;
+        // Calculate the center of the camera
+        cameraCenter = mainCamera.transform.position;
     }
 
     // Update is called once per frame
@@ -27,27 +31,31 @@ public class GameOfLife : MonoBehaviour
         gameBoard = new Cell[gameBoardLength, gameBoardHeight];
     }
 
-    public void PopulateGameBoardWithCells(GameObject cellPrefab, float cellSizeX, float cellSizeY)
+   public void PopulateGameBoardWithCells(float cellSizeX, float cellSizeY)
     {
-        // Calculate the center of the camera
-        Vector3 cameraCenter = mainCamera.transform.position;
-
+        Cell cellComponent;
         for (int i = 0; i < gameBoardLength; i++)
         {
             for (int j = 0; j < gameBoardHeight; j++)
             {
-                // Calculate the position relative to the camera center
                 Vector3 cellPosition = new Vector3(
                     cameraCenter.x - (gameBoardLength - 1) * 0.5f * cellSizeX + i * cellSizeX,
                     cameraCenter.y - (gameBoardHeight - 1) * 0.5f * cellSizeY + j * cellSizeY,
                     cameraCenter.z
                 );
 
-                // Instantiate the cell prefab as a GameObject at the calculated position
                 GameObject cellObject = Instantiate(cellPrefab, cellPosition, Quaternion.identity);
-                Cell cellComponent = cellObject.GetComponent<Cell>();
+                cellComponent = cellObject.GetComponent<Cell>();
 
+                gameBoard[i, j] = cellComponent;
+            }
+        }
+        for (int i = 0; i < gameBoardLength; i++)
+        {
+            for (int j = 0; j < gameBoardHeight; j++)
+            {
                 // Connect each cell to its neighbors
+                cellComponent = gameBoard[i, j];
                 cellComponent.SetTopLeft(GetNeighbor(i - 1, j - 1));
                 cellComponent.SetTop(GetNeighbor(i, j - 1));
                 cellComponent.SetTopRight(GetNeighbor(i + 1, j - 1));
@@ -56,9 +64,6 @@ public class GameOfLife : MonoBehaviour
                 cellComponent.SetBottomLeft(GetNeighbor(i - 1, j + 1));
                 cellComponent.SetBottom(GetNeighbor(i, j + 1));
                 cellComponent.SetBottomRight(GetNeighbor(i + 1, j + 1));
-
-                // Store the cell component in the game board array
-                gameBoard[i, j] = cellComponent;
             }
         }
     }
@@ -66,18 +71,11 @@ public class GameOfLife : MonoBehaviour
 
     private Cell GetNeighbor(int x, int y)
     {
-        // Check for out-of-bounds coordinates
-        if (x >= 0 && x < gameBoardLength && y >= 0 && y < gameBoardHeight)
-        {
-            return gameBoard[x, y];
-        }
-        else
-        {
-            // Handle edge cases by wrapping around
-            x = (x + gameBoardLength) % gameBoardLength;
-            y = (y + gameBoardHeight) % gameBoardHeight;
-            return gameBoard[x, y];
-        }
+        // Calculate wrapped indices for out-of-bounds coordinates
+        x = (x + gameBoardLength) % gameBoardLength;
+        y = (y + gameBoardHeight) % gameBoardHeight;
+
+        return gameBoard[x, y];
     }
 
 
@@ -118,16 +116,34 @@ public class GameOfLife : MonoBehaviour
         }
     }
 
-    private bool manualCellSettingEnabled = false;
-
     public void EnableManualCellSetting()
     {
         manualCellSettingEnabled = true;
+        for (int i = 0; i < gameBoardLength; i++)
+        {
+            for (int j = 0; j < gameBoardHeight; j++)
+            {
+                Cell currentCell = gameBoard[i, j];
+                currentCell.SetManual(true);
+            }
+        }
     }
 
     public void DisableManualCellSetting()
     {
         manualCellSettingEnabled = false;
+        for (int i = 0; i < gameBoardLength; i++)
+        {
+            for (int j = 0; j < gameBoardHeight; j++)
+            {
+                Cell currentCell = gameBoard[i, j];
+                currentCell.SetManual(false);
+            }
+        }
+    }
+    public bool IsManualCellSettingEnabled()
+    {
+        return manualCellSettingEnabled;
     }
 
     public void ToggleCellState(int x, int y)

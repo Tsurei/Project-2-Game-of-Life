@@ -10,18 +10,19 @@ public class ManualCellSetController : MonoBehaviour
 
     void Start()
     {
-        gameOfLife = GetComponent<GameOfLife>();
+        gameOfLife = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameOfLife>();
     }
 
-    public void ToggleManualCellSet(bool isManualSetEnabled)
+    public void ToggleManualCellSet(Toggle isManualSetEnabled)
     {
-        if (isManualSetEnabled)
+        if (isManualSetEnabled.isOn)
         {
-            gameOfLife.EnableManualCellSetting(); 
+            gameOfLife.EnableManualCellSetting();
         }
         else
         {
             gameOfLife.DisableManualCellSetting();
         }
+        Debug.Log(isManualSetEnabled.isOn);
     }
 }
