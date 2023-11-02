@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameOfLife : MonoBehaviour
 {
-    private int currentGen = 0;
+    // Variables
+    private TextMeshPro text;
+    private int currentGen = 1;
     public GameObject cellPrefab;
     private Cell[,] gameBoard;
 
@@ -13,28 +16,34 @@ public class GameOfLife : MonoBehaviour
     private int gameBoardLength;
     private int gameBoardHeight;
     private Vector3 cameraCenter;
+
+
     // Start is called before the first frame update
     void Start()
     {
         mainCamera = Camera.main;
         // Calculate the center of the camera
         cameraCenter = mainCamera.transform.position;
+        text = GetComponent<TextMeshPro>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        // Update any continuous game logic here
     }
 
+    // Initialize the game board
     public void InitializeGameBoard()
     {
         gameBoard = new Cell[gameBoardLength, gameBoardHeight];
     }
 
-   public void PopulateGameBoardWithCells(float cellSizeX, float cellSizeY)
+    // Populate the game board with cells
+    public void PopulateGameBoardWithCells(float cellSizeX, float cellSizeY)
     {
         Cell cellComponent;
+
         for (int i = 0; i < gameBoardLength; i++)
         {
             for (int j = 0; j < gameBoardHeight; j++)
@@ -51,11 +60,12 @@ public class GameOfLife : MonoBehaviour
                 gameBoard[i, j] = cellComponent;
             }
         }
+
+        // Connect each cell to its neighbors
         for (int i = 0; i < gameBoardLength; i++)
         {
             for (int j = 0; j < gameBoardHeight; j++)
             {
-                // Connect each cell to its neighbors
                 cellComponent = gameBoard[i, j];
                 cellComponent.SetTopLeft(GetNeighbor(i - 1, j - 1));
                 cellComponent.SetTop(GetNeighbor(i, j - 1));
@@ -69,7 +79,7 @@ public class GameOfLife : MonoBehaviour
         }
     }
 
-
+    // Get the neighboring cell, considering wrapping
     private Cell GetNeighbor(int x, int y)
     {
         // Calculate wrapped indices for out-of-bounds coordinates
@@ -79,7 +89,7 @@ public class GameOfLife : MonoBehaviour
         return gameBoard[x, y];
     }
 
-
+    // Calculate the next generation
     public void CalculateNextGeneration()
     {
         // First, calculate the next state for each cell
@@ -104,8 +114,10 @@ public class GameOfLife : MonoBehaviour
         }
 
         currentGen++;
+        UpdateText();
     }
 
+    // Clear the grid to an initial state
     public void ClearGrid()
     {
         // Iterate through the entire grid and set all cells to the "Dead" state.
@@ -117,8 +129,12 @@ public class GameOfLife : MonoBehaviour
                 currentCell.SetStatus(Cell.CellState.Dead);
             }
         }
+
+        currentGen = 0;
+        UpdateText();
     }
 
+    // Enable manual cell setting
     public void EnableManualCellSetting()
     {
         manualCellSettingEnabled = true;
@@ -132,6 +148,7 @@ public class GameOfLife : MonoBehaviour
         }
     }
 
+    // Disable manual cell setting
     public void DisableManualCellSetting()
     {
         manualCellSettingEnabled = false;
@@ -144,11 +161,14 @@ public class GameOfLife : MonoBehaviour
             }
         }
     }
+
+    // Check if manual cell setting is enabled
     public bool IsManualCellSettingEnabled()
     {
         return manualCellSettingEnabled;
     }
 
+    // Toggle the state of a specific cell (used in manual cell setting)
     public void ToggleCellState(int x, int y)
     {
         if (manualCellSettingEnabled && IsWithinBounds(x, y))
@@ -165,33 +185,45 @@ public class GameOfLife : MonoBehaviour
         }
     }
 
+    // Check if given coordinates are within bounds of the game board
     private bool IsWithinBounds(int x, int y)
     {
         return x >= 0 && x < gameBoardLength && y >= 0 && y < gameBoardHeight;
     }
 
+    // Set the length of the game board
     public void SetGameBoardLength(int length)
     {
         gameBoardLength = length;
     }
 
+    // Get the length of the game board
     public int GetGameBoardLength()
     {
         return gameBoardLength;
     }
 
+    // Set the height of the game board
     public void SetGameBoardHeight(int height)
     {
         gameBoardHeight = height;
     }
 
+    // Get the height of the game board
     public int GetGameBoardHeight()
     {
         return gameBoardHeight;
     }
 
+    // Get a specific cell by its coordinates
     public Cell GetCell(int x, int y)
     {
         return gameBoard[x, y];
+    }
+
+    // Update the text displaying the current generation number
+    public void UpdateText()
+    {
+        text.text = "Current Gen: " + currentGen;
     }
 }

@@ -11,13 +11,16 @@ public class SimulationController : MonoBehaviour
 
     void Start()
     {
+        // Find and reference the GameOfLife component
         gameOfLife = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameOfLife>();
+
+        // Find and reference the TextMeshProUGUI component for displaying "Play" or "Pause"
         text = GetComponentInChildren<TextMeshProUGUI>();
     }
 
     public void TogglePausePlay()
     {
-
+        // Toggle between pause and play states
         if (isPaused)
         {
             // Pause the simulation
@@ -30,6 +33,6 @@ public class SimulationController : MonoBehaviour
             Time.timeScale = 1f; // Resume time to normal speed
             text.text = "Pause";
         }
-        isPaused = !isPaused;
+        isPaused = !isPaused; // Toggle the pause state
     }
 }

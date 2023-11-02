@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(GameOfLife))]
 public class GameManager : MonoBehaviour
@@ -16,6 +17,7 @@ public class GameManager : MonoBehaviour
     private Camera mainCamera;
     private float simulationInterval = 2f;
     private float timer = 0f;
+    [SerializeField] private Slider slider;
 
     void Start()
     {
@@ -35,6 +37,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        simulationInterval = slider.value;
         timer += Time.deltaTime;
         if (timer >= simulationInterval)
         {
@@ -77,5 +80,10 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void SetTimerInterval(int timer)
+    {
+        simulationInterval = timer;
     }
 }

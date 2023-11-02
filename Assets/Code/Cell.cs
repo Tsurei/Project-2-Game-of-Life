@@ -26,6 +26,7 @@ public class Cell : MonoBehaviour
     private Cell bottomRight;
     private int neighbourAlive = 0;
 
+    // Constructor for Cell class
     public Cell()
     {
         status = CellState.Dead;
@@ -35,12 +36,13 @@ public class Cell : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        sprite = this.GetComponent <SpriteRenderer>();
+        sprite = this.GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Update the cell's appearance based on its status (Alive/Dead)
         if (status == CellState.Alive)
         {
             sprite.color = aliveColor;
@@ -49,11 +51,11 @@ public class Cell : MonoBehaviour
         {
             sprite.color = deadColor;
         }
-
     }
 
     private void OnMouseOver()
     {
+        // Check if manual setting is enabled and allow toggling cell status on mouse click
         if (manualSet)
         {
             if (Input.GetMouseButtonDown(0))
@@ -70,6 +72,7 @@ public class Cell : MonoBehaviour
 
     public void SetNextStatus()
     {
+        // Calculate the next cell status based on the number of live neighbors
         if (status == CellState.Alive)
         {
             if (neighbourAlive < 2 || neighbourAlive > 3)
@@ -96,6 +99,7 @@ public class Cell : MonoBehaviour
 
     public void UpdateStatus()
     {
+        // Update the current status based on the next status
         status = nextStatus;
     }
 
@@ -236,15 +240,15 @@ public class Cell : MonoBehaviour
         status = state;
     }
 
+    // Toggle the cell status between Alive and Dead
     public void ToggleCellStatus()
     {
-            
-        if (GetStatus() == CellState.Alive) 
-        {        
-            SetStatus(CellState.Dead);    
-        }   
-        else  
-        {       
+        if (GetStatus() == CellState.Alive)
+        {
+            SetStatus(CellState.Dead);
+        }
+        else
+        {
             SetStatus(CellState.Alive);
         }
     }

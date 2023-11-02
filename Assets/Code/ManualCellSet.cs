@@ -10,6 +10,7 @@ public class ManualCellSetController : MonoBehaviour
 
     void Start()
     {
+        // Find and reference the GameOfLife component
         gameOfLife = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameOfLife>();
     }
 
@@ -17,10 +18,12 @@ public class ManualCellSetController : MonoBehaviour
     {
         if (isManualSetEnabled.isOn)
         {
+            // Enable manual cell setting in the GameOfLife component
             gameOfLife.EnableManualCellSetting();
         }
         else
         {
+            // Disable manual cell setting in the GameOfLife component
             gameOfLife.DisableManualCellSetting();
         }
         Debug.Log(isManualSetEnabled.isOn);
